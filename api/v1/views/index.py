@@ -23,7 +23,7 @@ def stats():
     from models.city import City
     from models.place import Place
     from models.review import Review
-    from models.state import State
+    from models.state import City
     from models.user import User
 
     res = {
@@ -31,7 +31,7 @@ def stats():
         "cities":  storage.count(City),
         "places":  storage.count(Place),
         "reviews":  storage.count(Review),
-        "states":  storage.count(State),
+        "states":  storage.count(City),
         "users":  storage.count(User)
     }
     response = make_response(json.dumps(res), 200)
