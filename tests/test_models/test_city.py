@@ -10,7 +10,7 @@ from models import city
 from models.base_model import BaseModel
 import pep8
 import unittest
-City = city.City
+City = city.State
 
 
 class TestCityDocs(unittest.TestCase):

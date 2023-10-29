@@ -3,7 +3,7 @@
 from flask import abort, make_response, request
 from api.v1.views import app_views
 from models import storage
-from models.city import City
+from models.city import State
 from models.state import State
 import json
 
@@ -28,7 +28,7 @@ def get_cities(id_state):
 @app_views.route("/cities/<id>", methods=["GET"])
 def get_city(id):
     """Get City by ID."""
-    city = storage.get(City, id)
+    city = storage.get(State, id)
 
     if city is None:
         abort(404)
@@ -42,7 +42,7 @@ def get_city(id):
 @app_views.route("/cities/<id>", methods=["DELETE"])
 def delete_city(id):
     """Delete City by ID."""
-    city = storage.get(City, id)
+    city = storage.get(State, id)
 
     if not city:
         abort(404)
@@ -71,7 +71,7 @@ def create_city(id_state):
         abort(400, description="Missing name")
 
     body = request.get_json()
-    city = City(**body)
+    city = State(**body)
     city.state_id = id_state
     city.save()
 
@@ -84,7 +84,7 @@ def create_city(id_state):
 @app_views.route("/cities/<id>", methods=["PUT"])
 def put_city(id):
     """Update City by ID."""
-    city = storage.get(City, id)
+    city = storage.get(State, id)
     exclude_keys = ["id", "state_id", "created_at", "updated_at"]
 
     if not city:

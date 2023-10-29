@@ -20,18 +20,18 @@ def stats():
     """Handle API stats."""
     from models import storage
     from models.amenity import Amenity
-    from models.city import City
+    from models.city import State
     from models.place import Place
     from models.review import Review
-    from models.state import City
+    from models.state import State
     from models.user import User
 
     res = {
         "amenities": storage.count(Amenity),
-        "cities":  storage.count(City),
+        "cities":  storage.count(State),
         "places":  storage.count(Place),
         "reviews":  storage.count(Review),
-        "states":  storage.count(City),
+        "states":  storage.count(State),
         "users":  storage.count(User)
     }
     response = make_response(json.dumps(res), 200)
