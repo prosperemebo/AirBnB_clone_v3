@@ -2,14 +2,14 @@
 """ holds class State"""
 import models
 from models.base_model import BaseModel, Base
-from models.city import State
+from models.city import City
 from os import getenv
 import sqlalchemy
 from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship
 
 
-class State(BaseModel, Base):
+class City(BaseModel, Base):
     """Representation of state """
     if models.storage_t == "db":
         __tablename__ = 'states'
@@ -27,7 +27,7 @@ class State(BaseModel, Base):
         def cities(self):
             """getter for list of city instances related to the state"""
             city_list = []
-            all_cities = models.storage.all(State)
+            all_cities = models.storage.all(City)
             for city in all_cities.values():
                 if city.state_id == self.id:
                     city_list.append(city)
