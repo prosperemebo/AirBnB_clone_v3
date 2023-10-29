@@ -3,14 +3,14 @@
 from flask import abort, make_response, request
 from api.v1.views import app_views
 from models import storage
-from models.state import City
+from models.state import State
 import json
 
 
 @app_views.route("/states", methods=["GET"])
 def get_states():
     """Get all States."""
-    states = storage.all(City).values()
+    states = storage.all(State).values()
     states_list = []
 
     for state in states:
@@ -24,7 +24,7 @@ def get_states():
 @app_views.route("/states/<id>", methods=["GET"])
 def get_state(id):
     """Get State by ID."""
-    state = storage.get(City, id)
+    state = storage.get(State, id)
 
     if state is None:
         abort(404)
@@ -38,7 +38,7 @@ def get_state(id):
 @app_views.route("/states/<id>", methods=["DELETE"])
 def delete_state(id):
     """Delete state by ID."""
-    state = storage.get(City, id)
+    state = storage.get(State, id)
 
     if state is None:
         abort(404)
@@ -60,7 +60,7 @@ def create_state():
         abort(400, description="Missing name")
 
     data = request.get_json()
-    state = City(**data)
+    state = State(**data)
     state.save()
 
     res = state.to_dict()
@@ -72,7 +72,7 @@ def create_state():
 @app_views.route("/states/<id>", methods=["PUT"])
 def put_state(id):
     """Update State."""
-    state = storage.get(City, id)
+    state = storage.get(State, id)
     exclude_keys = ["id", "created_at", "updated_at"]
 
     if not state:
