@@ -9,8 +9,8 @@ from api.v1.views import app_views
 @app_views.route("/status")
 def status():
     """Handle API status."""
-    res = {"status": "OK"}
-    response = make_response(json.dumps(res), 200)
+    data = {"status": "OK"}
+    response = make_response(json.dumps(data), 200)
     response.headers['Content-Type'] = 'application/json'
     return response
 
@@ -26,7 +26,7 @@ def stats():
     from models.state import State
     from models.user import User
 
-    res = {
+    data = {
         "amenities": storage.count(Amenity),
         "cities":  storage.count(City),
         "places":  storage.count(Place),
@@ -34,6 +34,6 @@ def stats():
         "states":  storage.count(State),
         "users":  storage.count(User)
     }
-    response = make_response(json.dumps(res), 200)
+    response = make_response(json.dumps(data), 200)
     response.headers['Content-Type'] = 'application/json'
     return response
