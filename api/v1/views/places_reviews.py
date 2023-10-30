@@ -9,7 +9,7 @@ from models.user import User
 import json
 
 
-@app_views.route("/places/<id_place>/reviews", methods=["GET"])
+@app_views.route("/places/<place_id>/reviews", methods=["GET"])
 def get_reviews(place_id):
     """Get All Reviews by Place."""
     place = storage.get(Place, place_id)
@@ -26,7 +26,7 @@ def get_reviews(place_id):
     return response
 
 
-@app_views.route("/reviews/<id>", methods=["GET"])
+@app_views.route("/reviews/<review_id>", methods=["GET"])
 def get_review(review_id):
     """Get Reviews by ID."""
     review = storage.get(Review, review_id)
@@ -40,7 +40,7 @@ def get_review(review_id):
     return response
 
 
-@app_views.route("/reviews/<id>", methods=["DELETE"])
+@app_views.route("/reviews/<review_id>", methods=["DELETE"])
 def delete_review(review_id):
     """Delete Review by ID."""
     review = storage.get(Review, review_id)
@@ -56,7 +56,7 @@ def delete_review(review_id):
     return response
 
 
-@app_views.route("/places/<id_place>/reviews", methods=["POST"])
+@app_views.route("/places/<place_id>/reviews", methods=["POST"])
 def create_review(place_id):
     """Create Review."""
     place = storage.get(Place, place_id)
@@ -65,7 +65,7 @@ def create_review(place_id):
     if place is None:
         abort(404)
 
-    if not body:
+    if body is None:
         abort(400, description='Not a JSON')
 
     if "user_id" not in body:
@@ -87,7 +87,7 @@ def create_review(place_id):
     return response
 
 
-@app_views.route("/reviews/<id>", methods=["PUT"])
+@app_views.route("/reviews/<review_id>", methods=["PUT"])
 def put_review(review_id):
     """Update Review."""
     body = request.get_json()
