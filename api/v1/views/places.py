@@ -115,3 +115,64 @@ def put_place(place_id):
     response = make_response(json.dumps(data), 200)
     response.headers["Content-Type"] = "application/json"
     return response
+
+
+@app_views.route('/places_search', methods=['POST'])
+def places_search_enhanced():
+    """Search Place."""
+    body = request.get_json()
+    places_list = []
+
+    if body is None:
+        abort(400, description="Not a JSON")
+
+    if body and len(body):
+        states = body.get('states', None)
+        cities = body.get('cities', None)
+        amenities = body.get('amenities', None)
+
+    if not body or not len(body) or (
+            not states and
+            not cities and
+            not amenities):
+        places = storage.all(Place).values()
+        places_list = [place.to_dict() for place in places]
+
+        response = make_response(json.dumps(places_list), 200)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+
+    if states:
+        states_instance = [storage.get(State, s_id) for s_id in states]
+        for state in states_instance:
+            if state:
+                for city in state.cities:
+                    if city:
+                        places_list.extend(place for place in city.places)
+
+    if cities:
+        city_obj = [storage.get(City, c_id) for c_id in cities]
+        for city in city_obj:
+            if city:
+                for place in city.places:
+                    if place not in places_list:
+                        places_list.append(place)
+
+    if amenities:
+        if places_list is None:
+            places_list = storage.all(Place).values()
+        amenities_obj = [storage.get(Amenity, a_id) for a_id in amenities]
+        places_list = [place for place in places_list
+                       if all([am in place.amenities
+                               for am in amenities_obj])]
+
+    places = []
+    for place in places_list:
+        new_place = place.to_dict()
+        new_place.pop('amenities', None)
+
+        places.append(new_place)
+
+    response = make_response(json.dumps(places), 200)
+    response.headers['Content-Type'] = 'application/json'
+    return response
